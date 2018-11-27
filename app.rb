@@ -11,9 +11,6 @@ set :root, File.dirname(__FILE__)
 set :public_folder, Proc.new { File.join(root, "static") }
 set :views, Proc.new { File.join(root, "view") }
 
-json = File.read('keys.json')
-keys = JSON.parse(json)
-
 get '/' do
     erb :index
 end
