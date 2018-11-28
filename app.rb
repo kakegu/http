@@ -1,8 +1,4 @@
-require "json"
-require "pp"
 require 'sinatra'
-# require 'rack/ssl'
-# use Rack::SSL
 
 port = ARGV[0]
 set :bind, '0.0.0.0'
@@ -13,4 +9,8 @@ set :views, Proc.new { File.join(root, "view") }
 
 get '/' do
     erb :index
+end
+
+get '/demo' do
+    erb :demo
 end

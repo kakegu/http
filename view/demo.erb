@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang=en>
+
+<head>
+    <meta charset=utf-8>
+    <meta http-equiv=X-UA-Compatible content="IE=edge">
+    <meta name=viewport content="width=device-width,initial-scale=1">
+    <link href=/css/bootstrap.min.css rel=stylesheet>
+    <link href=/css/style.css rel=stylesheet>
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <style>
+    #checking,#paying,#install_wallet,#payment_success{
+        display:none;
+    }
+    .mask{
+        position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #000;
+    }
+    .first {
+  display: table;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  position: fixed;
+  bottom: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.center {
+  display: table-cell;
+  vertical-align: middle;
+}
+.tip {
+  color: #666;
+  text-align: left;
+  font-size: 16px;
+}
+h1 {
+  color: #26a2ff;
+  margin-bottom: 20px;
+  font-size: 20px;
+}
+.pan {
+  padding: 20px;
+  background: #fff;
+  width: 90%;
+  max-width: 300px;
+  margin: 0 auto;
+  border-radius: 10px;
+}
+.value{
+    width:40px;
+    height:40px;
+    margin:2px 1px 3px 1px;
+}
+.tpay,.cancel{
+    width:130px;
+    height:40px;
+    margin-top: 5px;
+}
+.install{
+    max-width:800px;
+}
+.initial img{
+    width:100%;
+    max-width:500px;
+}
+</style>
+</head>
+<body>
+    <div id="page">
+        <div class="first">
+            <span class="center">
+                <div class="pan">
+                    <h2>赞赏</h2>
+
+        <p>大家好，我最喜欢小猪佩琦了。</p>
+        <p><img src="/img/logo.gif" width="100%"></p>
+        <p>猛戳下面的按钮，进行全网赞赏！</p>
+        <div><button type="button" class="btn btn-warning paying" net="main">主网赞赏</button></div>
+        <p></p>
+        <div><button type="button" class="btn btn-warning paying" net="test">测试网赞赏</button></div>
+        <p></p>
+        <div><button type="button" class="btn btn-warning paying" net="zero">开发网赞赏</button></div>
+        
+        
+        
+                </div>
+            </span>
+        </div>
+        
+    </div>
+    <div id="has_wallet" style="display:none"></div>
+    <div id="paying">
+        <div class="mask"></div>
+        <div class="first">
+            <span class="center">
+                <div class="pan">
+                    <h3>选择赞赏金额</h3>
+                    <div>
+                        <button type="button" class="btn value btn-warning" amount="1">1</button>
+                        <button type="button" class="btn value btn-default" amount="2">2</button>
+                        <button type="button" class="btn value btn-default" amount="5">5</button>
+                    </div>
+                    <div>
+                        <button type="button" class="btn value btn-default" amount="10">10</button>
+                        <button type="button" class="btn value btn-default" amount="20">20</button>
+                        <button type="button" class="btn value btn-default" amount="50">50</button>
+                    </div>
+                    <div>
+                        <button id="pay" class="btn btn-danger tpay" net="test" address="OQWWU62QN3KVURXQVMOUK2TVEDSNGFKK" amount="1.0" order_id="134134134">立刻赞赏</button>
+                    </div>
+                    <div>
+                        <button class="btn btn-default cancel">取消赞赏</button>
+                    </div>
+                </div>
+            </span>
+        </div>
+    </div>
+    <div id="checking">
+        <div class="mask"></div>
+        <div class="first">
+            <span class="center">
+                <div class="pan">
+                    <h4>支付中。。。</h4>
+                    <p id="time">120</p>
+                    <button type="button" class="btn payfinish btn-warning" amount="1">我已支付</button>
+                </div>
+            </span>
+        </div>
+    </div>
+    <div id="payment_success">
+        <div class="mask"></div>
+        <div class="first">
+            <span class="center">
+                <div class="pan">
+                    <h4>支付成功！</h4>
+                </div>
+            </span>
+        </div>
+    </div>
+    <div id="install_wallet">
+        <div class="pan install">
+                    <h3>你还没有安装 Fusion Wallet chrome 扩展插件！</h3>
+                    <div style="text-align:left;">
+                        <p>你还没有安装Chrome扩展钱包。请按照如下步骤安装：</p>
+                        <p>1）进入chrome扩展页面,打开开发者模式</p>
+                        <p><img src="/img/chrome_1.gif"></p>
+                        <p>2）下载 <a href="https://github.com/fusionwallet/chrome_extensions/releases/download/1.0.1/chrome.crx" target="_blank" >chrome.crx</a></p>
+                        <p>3）拖拽至 chrome 浏览器，点击安装</p>
+                        <p><img src="/img/chrome_2.gif"></p>
+                        <button type="button" class="btn installfinish btn-warning">我已安装完毕</button>
+                    </div>
+                </div>
+    </div>
+</body>
+<script>
+//订单id生成
+function build_order_id(){
+    const now = new Date()
+        let month = now.getMonth() + 1
+        let day = now.getDate()
+        let hour = now.getHours()
+        let minutes = now.getMinutes()
+        let seconds = now.getSeconds()
+        return now.getFullYear().toString() + month.toString() + day + hour + minutes + seconds + (Math.round(Math.random() * 23 + 100)).toString()
+}
+
+// function check() {
+//     fetch('http://150.109.57.242:6002/api/v1/asset/balance/OQWWU62QN3KVURXQVMOUK2TVEDSNGFKK/TTT')
+//     .then(response => response.json())
+//     .then(json => {
+//         console.log(json)
+//     });
+//     启动一个定时器，检测支付状态。
+// }
+
+//点击赞赏
+$(".paying").click(function(){
+
+    $("#pay").attr("net",$(this).attr("net"));
+    $("#pay").attr("order_id",build_order_id());
+    $("#paying").show();
+
+});
+
+//选择金额
+$(".value").click(function(){
+    $(".value").attr("class","btn value btn-default");
+    $(this).attr("class","btn value btn-warning");
+
+    $("#pay").attr("amount",$(this).attr("amount"));
+    //$("#pay").text("支付 "+$(this).attr("amount")+" ");
+    //document.getElementById("pay").setAttribute("amount",v);
+});
+$(".tpay").click(function(){
+    
+    //启动支付
+
+    var address = $(this).attr("address");
+    var amount = parseFloat($(this).attr("amount"));
+    var order_id = $(this).attr("order_id");
+
+    if($("#has_wallet").attr("wallet")=="true"){
+        //安装了chrome扩展钱包
+        $("#checking").show();
+        $("#paying").hide();
+        time = 120;
+        t = setInterval(() => {
+            time -= 1;
+            check(address,order_id,amount,function(){
+                clearInterval(t);
+                //支付成功
+                $("#payment_success").show();
+                console.log("ok");
+            });
+            if (time<0){
+                //支付超时
+                clearInterval(t);
+            }else{
+                $("#time").text(time);
+            }
+            
+        }, 1000);
+        // get 支付记录
+
+
+    }else{
+        //没有安装钱包，则显示安装方法
+        $("#install_wallet").show();
+        $("#checking").hide();
+        $("#paying").hide();
+        $("#page").hide();
+    }
+
+        // var net = this.getAttribute('net');
+        // var address = this.getAttribute('address');
+        // var amount = this.getAttribute('amount');
+        // var message = this.getAttribute('message');
+});
+
+//取消支付
+$(".cancel").click(function(){
+    $(this).parent().parent().parent().parent().parent().hide();
+});
+
+//安装结束
+$(".installfinish").click(function(){
+    $("#install_wallet").hide();
+    $("#page").show();
+});
+
+
+function check(address,order_id,amount,cb){
+
+    $.getJSON("http://150.109.57.242:6002/api/v1/asset/txhistory/OQWWU62QN3KVURXQVMOUK2TVEDSNGFKK/TTT/1/10",function(json){
+        array = json.data.history;
+        array.forEach(element => {
+            messages = element.unit.messages;
+            if(messages.length == 2){
+                if(messages[0].payload == order_id){
+                    outputs = messages[1].payload.outputs
+                    outputs.forEach(element => {
+                        if(element.address == address){
+                            if(element.amount == amount*1000000){
+                                cb();
+                            }
+                        }
+                    });
+                    
+                };
+            };
+            
+        });
+    })
+}
+</script>
+</html>
